@@ -38,5 +38,40 @@ exports.createPages = ({ graphql, actions }) => {
     }) // query.then
   }) // createWpPosts
 
-  return Promise.all([createWpPosts])
+  const createWpPages = new Promise((resolve, reject) => {
+    const query = graphql(`
+      {
+        allWordpressPage {
+          edges {
+            node {
+              id
+              slug
+            }
+          }
+        }
+      }
+    `)
+
+    query.then(result => {
+      if (result.errors) {
+        console.error(result.errors)
+        reject(result.errors)
+      }
+
+      const pageEdges = result.data.allWordpressPage.edges
+      pageEdges.forEach(edge => {
+        createPage({
+          path: `/${edge.node.slug}`,
+          component: path.resolve(`./src/templates/page.js`),
+          context: {
+            id: edge.node.id,
+          },
+        })
+      })
+
+      resolve()
+    }) // query.then
+  }) // createWpPages
+
+  return Promise.all([createWpPosts, createWpPages])
 } // createPages

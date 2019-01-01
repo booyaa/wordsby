@@ -29,7 +29,7 @@ const Layout = ({ children }) => (
         >
           {children}
           <footer>
-            © 2018, Built with <a href="https://www.gatsbyjs.org">Gatsby</a>
+            © 2018, Built with <a href="https://www.gatsbyjs.org">Gatsby</a> | <a href="/about">About Us</a>
           </footer>
         </div>
       </>
